@@ -9,7 +9,6 @@
     <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
     <title>Posts With Fetch</title>
     <link rel="stylesheet" href="./css/index.css">
-    
 </head>
 <body>
 
@@ -18,19 +17,32 @@
         <div class ="header">
             <h1>Your posts</h1>
             <div class="buttons">
-                <a href="#"><button id="btn-header-get-all">Get all posts</button></a>
-                <a href="createNewPost.html"><button id="btn-header-create-new">Create a new post</button></a>
-                <a href="#"><button id="btn-header-delete-all">Delete all posts</button></a>
+                <a href="index.html"><button class="back-btn">Back</button></a>
             </div>
         </div>
-        <!-- Post content -->
-        <div id="posts">
 
-        </div>
 </div>
 
 <div id="create-post">
-
+    <form id="create-form"> 
+        <div class="create-form-content">
+          <h2>Create a new post</h2>
+    
+          <div class="input-field">
+            <label for="title">Title</label>
+            <input id="title" type="text" class="input-field" required>   
+          </div>
+    
+          <div class="input-field">
+            <label for="text">Text</label>
+            <textarea id="text" type="text" class="textarea"></textarea>
+          </div>    
+        </div>
+        <div class="submit-form">
+          <button class="submit">Create</button>
+        </div>
+      </form>
+      
 </div>
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script> -->
@@ -39,6 +51,6 @@ src="https://code.jquery.com/jquery-2.2.4.min.js"
 integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
 crossorigin="anonymous">
 </script>
-<script src="index.js"></script>
+<script src="createNewPost.js"></script>
 </body>
 </html>

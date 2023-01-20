@@ -36,7 +36,7 @@ const card = function(post) {
   `
 }
 
-const inputForm = function() { 
+/* const inputForm = function() { 
   return ` 
   <form id="create-form" style="display: none;"> 
     <div class="create-form-content">
@@ -57,7 +57,7 @@ const inputForm = function() {
     </div>
   </form>
   `
-}
+} */
 
 const updateThisPostForm = function(data) { 
   return ` 
@@ -113,48 +113,57 @@ const noPosts = function() {
 //----- GET ALL POSTS ----------- 
 //*************************************************************************** 
 
-btnHeaderGetAll.addEventListener('click', async () =>{
 
+//btnHeaderGetAll.addEventListener('click', async () =>{
+document.addEventListener("DOMContentLoaded", async function() {
   $posts.innerHTML = '';
   $createPost.innerHTML = '';
 
-  const response = await fetch(BASE_URL);
-  const data =await response.json();
-  if (data.length == 0)
+ try
+ {
+    const response = await fetch(BASE_URL);
+    const data =await response.json();
+    if (data.length == 0)
+    {
+      $posts.innerHTML = noPosts();
+
+    }
+    else
+    {
+      for (let d of data) 
+      {    
+        $posts.innerHTML += card(d);   //responce.map(post => card(post)).join(' ')           
+      }
+
+      //Listen to buttons
+      const btnsDeleteThisPost = document.getElementsByClassName('delete-this-post');
+      const btnsGetThisPost = document.getElementsByClassName('get-this-post');
+      const btnsUpdateThisPost = document.getElementsByClassName('update-this-post');
+      const btnsShowContent = document.getElementsByClassName('show-content');
+
+      for (let button of btnsDeleteThisPost){
+        button.addEventListener('click', deleteThisPost);
+      }
+
+      for (let button of btnsGetThisPost){
+        button.addEventListener('click', getThisPost);
+      }
+
+      for (let button of btnsUpdateThisPost){
+        button.addEventListener('click', updateThisPost);
+      }
+
+      for (let button of btnsShowContent){
+        button.addEventListener('click', showContent);
+      }
+
+    }
+  }catch(error) 
   {
-    $posts.innerHTML = noPosts();
-
+  console.log(error);
   }
-  else
-  {
-    for (let d of data) 
-    {    
-      $posts.innerHTML += card(d);   //responce.map(post => card(post)).join(' ')           
-    }
 
-    //Listen to buttons
-    const btnsDeleteThisPost = document.getElementsByClassName('delete-this-post');
-    const btnsGetThisPost = document.getElementsByClassName('get-this-post');
-    const btnsUpdateThisPost = document.getElementsByClassName('update-this-post');
-    const btnsShowContent = document.getElementsByClassName('show-content');
 
-    for (let button of btnsDeleteThisPost){
-      button.addEventListener('click', deleteThisPost);
-    }
-
-    for (let button of btnsGetThisPost){
-      button.addEventListener('click', getThisPost);
-    }
-
-    for (let button of btnsUpdateThisPost){
-      button.addEventListener('click', updateThisPost);
-    }
-
-    for (let button of btnsShowContent){
-      button.addEventListener('click', showContent);
-    }
-
-  }
 }) 
 
 //----- GET ALL POSTS ----------- end
@@ -228,7 +237,7 @@ async function getThisPost(event) {
   const data = await res.json();
 
   $createPost.innerHTML = getThisPostCard(data);
-  
+  $("#get-form").show(1000);
   const btnBack = document.getElementById('back-to-all-posts');
   btnBack.addEventListener('click', ()=>{btnHeaderGetAll.click();});   
 }
