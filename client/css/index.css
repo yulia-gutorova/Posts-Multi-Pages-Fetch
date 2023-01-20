@@ -132,7 +132,11 @@ textarea:focus {
     border-color: #000;
 }
 
-.submit-form{
+.submit-form, .back{
     text-align: center;
+}
+
+.back{
+    margin-top: 30px;
 }
   
