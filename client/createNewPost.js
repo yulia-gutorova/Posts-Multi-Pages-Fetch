@@ -31,7 +31,6 @@ const BASE_URL = '/api/post'
         console.log(error);
     }
     
-
       location.replace("index.html");  
     }) 
  
