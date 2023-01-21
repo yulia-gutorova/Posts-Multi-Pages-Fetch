@@ -1,14 +1,8 @@
-
 const $posts = document.querySelector('#posts');
-const $createPost = document.querySelector('#create-post');
-//const $form = document.querySelector('#create-form');
 
-// const btnCreate = document.querySelector('.submit');
-const btnHeaderGetAll = document.getElementById('btn-header-get-all');
 const btnHeaderCreate = document.getElementById('btn-header-create-new');
 const btnHeaderDeleteAll = document.getElementById('btn-header-delete-all');
 
-//let posts = []
 const BASE_URL = '/api/post'
 
 //*************************************************************************** 
@@ -26,79 +20,16 @@ const card = function(post) {
       <p>${new Date(post.date).toLocaleDateString()}</p>
       <hr>
       <div class="card-action">
-        <button class="show-content" data_id=${post._id}>Show content</button>
-        <button class="get-this-post" data_id=${post._id}>Get only</button>
-        <button class="update-this-post" data_id=${post._id}>Update</button>
-        <button class="delete-this-post" data_id=${post._id}>Delete</button>          
+      <a href="#"><button class="show-content" data-id=${post._id}>Show content</button></a>
+      <a href="getThisPost.html?id=${post._id}"><button class="get-this-post" data-id=${post._id}>Get only</button></a>
+      <a href="updateThisPost.html?id=${post._id}"><button class="update-this-post" data-id=${post._id}>Update</button></a>
+      <a href=""><button class="delete-this-post" data-id=${post._id}>Delete</button></a>          
       </div>
     </div>
   </div> 
   `
 }
 
-/* const inputForm = function() { 
-  return ` 
-  <form id="create-form" style="display: none;"> 
-    <div class="create-form-content">
-      <h2>Create a new post</h2>
-
-      <div class="input-field">
-        <label for="title">Title</label>
-        <input id="title" type="text" class="input-field" required>   
-      </div>
-
-      <div class="input-field">
-        <label for="text">Text</label>
-        <textarea id="text" type="text" class="textarea"></textarea>
-      </div>    
-    </div>
-    <div class="submit-form">
-      <button class="submit">Create</button>
-    </div>
-  </form>
-  `
-} */
-
-const updateThisPostForm = function(data) { 
-  return ` 
-  <form id="update-form"> 
-    <div class="update-form-content">
-      <h2>Update post</h2>
-
-      <div class="input-field">
-        <label for="title">Title</label>
-        <input id="title" type="text" class="input-field" required>   
-      </div>
-
-      <div class="input-field">
-        <label for="text">Text</label>
-        <textarea id="text" type="text" class="textarea"></textarea>
-      </div>    
-    </div>
-    <div class="submit-form">
-      <button id="update">Update post</button>
-    </div>
-  </form>
-  `
-}
-
-
-const getThisPostCard = function(data) { 
-  return ` 
-  <form id="get-form" style="display: none;"> 
-    <h2 class="card-title">${data.post.title}</h2>
-    <div class="content" >      
-        <p class='post-content'>${data.post.text}</p>      
-    </div>
-    <p>${new Date(data.post.date).toLocaleDateString()}</p>
-    <hr>
-    <div class="card-action">
-      <button id="back-to-all-posts">Back</button>
-    </div>
-    </div>
-  </form>
-  `
-}
 
 const noPosts = function() { 
   return ` 
@@ -113,11 +44,8 @@ const noPosts = function() {
 //----- GET ALL POSTS ----------- 
 //*************************************************************************** 
 
-
-//btnHeaderGetAll.addEventListener('click', async () =>{
+ 
 document.addEventListener("DOMContentLoaded", async function() {
-  $posts.innerHTML = '';
-  $createPost.innerHTML = '';
 
  try
  {
@@ -126,7 +54,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (data.length == 0)
     {
       $posts.innerHTML = noPosts();
-
     }
     else
     {
@@ -137,25 +64,15 @@ document.addEventListener("DOMContentLoaded", async function() {
 
       //Listen to buttons
       const btnsDeleteThisPost = document.getElementsByClassName('delete-this-post');
-      const btnsGetThisPost = document.getElementsByClassName('get-this-post');
-      const btnsUpdateThisPost = document.getElementsByClassName('update-this-post');
       const btnsShowContent = document.getElementsByClassName('show-content');
 
-      for (let button of btnsDeleteThisPost){
+       for (let button of btnsDeleteThisPost){
         button.addEventListener('click', deleteThisPost);
-      }
+      } 
 
-      for (let button of btnsGetThisPost){
-        button.addEventListener('click', getThisPost);
-      }
-
-      for (let button of btnsUpdateThisPost){
-        button.addEventListener('click', updateThisPost);
-      }
-
-      for (let button of btnsShowContent){
+       for (let button of btnsShowContent){
         button.addEventListener('click', showContent);
-      }
+      } 
 
     }
   }catch(error) 
@@ -163,148 +80,44 @@ document.addEventListener("DOMContentLoaded", async function() {
   console.log(error);
   }
 
-
 }) 
 
 //----- GET ALL POSTS ----------- end
 
-//*************************************************************************** 
-//----- CREATE A NEW POST ------- 
-//*************************************************************************** 
-
- btnHeaderCreate.addEventListener('click', () => {
-  console.log('CREATE a new post');
-  $posts.innerHTML ='';
-  $createPost.innerHTML = inputForm();
-  $("#create-form").show(1000);
-  const $form = document.querySelector('#create-form');
-  const input = document.getElementById('title');
-  const text = document.getElementById('text');
-
-  $form.addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    const newPost = {
-      title: input.value,
-      text: text.value
-    }
-    
-    const res = await fetch(BASE_URL, {
-      method: 'post',
-      body: JSON.stringify(newPost),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    btnHeaderGetAll.click();  
-  }) 
-}) 
-
-//----- CREATE A NEW POST ------- end
 
 //*************************************************************************** 
-//------ DELETE ALL POST -------- 
+//------ DELETE ALL POSTS -------- 
 //*************************************************************************** 
 btnHeaderDeleteAll.addEventListener('click', async () =>{
 
-  $createPost.innerHTML = '';
   const decision = confirm('Are you sure?');
 
   if (decision) {
-    const res = await fetch(BASE_URL, {
+    try{    const res = await fetch(BASE_URL, {
       method: 'delete'
     })
+  }catch(error) {
+    console.log(error);
+}
+
   }
-  btnHeaderGetAll.click(); 
 }) 
 
 //----- DELETE ALL POSTS  -------- end
 
-//*************************************************************************** 
-//-------- GET THIS POST -------- 
-//*************************************************************************** 
-
-async function getThisPost(event) {
-  
-  console.log('Get this post function');
-  $posts.innerHTML ='';
-  const id = event.target.getAttribute('data_id');
-
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    method: 'get'
-  })
-  const data = await res.json();
-
-  $createPost.innerHTML = getThisPostCard(data);
-  $("#get-form").show(1000);
-  const btnBack = document.getElementById('back-to-all-posts');
-  btnBack.addEventListener('click', ()=>{btnHeaderGetAll.click();});   
-}
-
-
-//-------- GET THIS POST -------- end
-
-//*************************************************************************** 
-//-------- UPDATE THIS POST ----- 
-//*************************************************************************** 
-
-async function updateThisPost(event) {
-  
-  console.log('Update this post function');
-
-  $posts.innerHTML ='';
-  const id = event.target.getAttribute('data_id');
-
-  $createPost.innerHTML = updateThisPostForm();
-  
-  const input = document.getElementById('title');
-  const text = document.getElementById('text');
-  const btnUpdate = document.getElementById('update');
-
-  let res = await fetch(`${BASE_URL}/${id}`, {
-    method: 'get'
-  })
-  const data = await res.json();
-
-  input.value = data.post.title;
-  text.value = data.post.text;
-
-  btnUpdate.addEventListener('click', async (event)=>{
-    event.preventDefault();
-    const updatedPost = {
-      _id: id,
-      title: input.value,
-      text: text.value
-    }
-
-    res = await fetch(`${BASE_URL}/${id}`, {
-      method: 'put',
-      body: JSON.stringify(updatedPost),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    btnHeaderGetAll.click(); 
-  });
-}
-
- //-------- UPDATE THIS POST ----- end
 
 //*************************************************************************** 
 //------- DELETE THIS POST ----- 
 //*************************************************************************** 
 
  async function deleteThisPost(event) {
-    const id = event.target.getAttribute('data_id');
+    const id = event.target.dataset.id;
     const decision = confirm('Do you really want to delete this post?')
   
     if (decision) {
       const res = await fetch(`${BASE_URL}/${id}`, {
         method: 'delete'
       })
-      btnHeaderGetAll.click();
     }
      
   }
@@ -316,20 +129,23 @@ async function updateThisPost(event) {
 //*************************************************************************** 
  async function showContent(event) {
 
+  event.preventDefault();
   let $jCurrentButton = $(this);
  
   console.log($jCurrentButton);
   
-  let $jParent = $jCurrentButton.parent(".card-action");
+  let $jParentA = $jCurrentButton.parent("a");
+  let $jParent = $jParentA.parent(".card-action");
   let $jDivSibling = $jParent.siblings(".content");
   let $jASibling = $jParent.siblings("a");
   $jASibling.children("h2").animate({fontSize: "24px"}, 1000 );
+
   if ($jDivSibling.is(":hidden")){
     $jDivSibling.show(2000);
     $jCurrentButton.html("Hide content");
   }
+
   else {
-    //$jSibling.animate({opacity: "hide"}, "3000");
     $jDivSibling.fadeOut(2000);
     $jCurrentButton.html("Show content");
   } 
