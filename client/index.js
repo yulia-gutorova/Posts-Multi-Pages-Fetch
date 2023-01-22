@@ -12,25 +12,26 @@ const BASE_URL = '/api/post'
 const card = function(post) { 
   return `  
   <div class="single-post-wrapper">
-    <div class="single-post">
+    <form class="single-post">
       <a href="" onClick="return false" id="card-title-link"><h2 class="card-title">${post.title}</h2></a>
       <div class="content" style="display: none;">        
-        <p class='post-content'>${post.text}</p>         
+        <p name='post-content' class='post-content'>${post.text}</p>         
       </div>
       <p>${new Date(post.date).toLocaleDateString()}</p>
       <hr>
       <div class="card-action">
-      <a href="#"><button class="show-content" data-id=${post._id}>Show content</button></a>
-      <a href="getThisPost.html?id=${post._id}"><button class="get-this-post" data-id=${post._id}>Get only</button></a>
-      <a href="updateThisPost.html?id=${post._id}"><button class="update-this-post" data-id=${post._id}>Update</button></a>
-      <a href=""><button class="delete-this-post" data-id=${post._id}>Delete</button></a>          
+        <a href="#"><button type="submit" class="show-content" data-id=${post._id}>Show content</button></a>
+        <a href="getThisPost.html?id=${post._id}"><button type="button" class="get-this-post" data-id=${post._id}>Get only</button></a>       
+        <a href="updateThisPost.html?id=${post._id}"><button type="button" class="update-this-post" data-id=${post._id}>Update</button></a>
+        <a href="#"><button type="button" class="delete-this-post" data-id=${post._id}>Delete</button></a>          
       </div>
-    </div>
+    </form>
   </div> 
   `
 }
 
 
+//  
 const noPosts = function() { 
   return ` 
   <div class="content">
@@ -45,14 +46,15 @@ const noPosts = function() {
 //*************************************************************************** 
 
  
-document.addEventListener("DOMContentLoaded", async function() {
-
+document.addEventListener("DOMContentLoaded", async function(event) {
+  //event.preventDefault();
  try
  {
     const response = await fetch(BASE_URL);
     const data =await response.json();
     if (data.length == 0)
     {
+      $posts.innerHTML = '';
       $posts.innerHTML = noPosts();
     }
     else
@@ -64,15 +66,24 @@ document.addEventListener("DOMContentLoaded", async function() {
 
       //Listen to buttons
       const btnsDeleteThisPost = document.getElementsByClassName('delete-this-post');
-      const btnsShowContent = document.getElementsByClassName('show-content');
 
-       for (let button of btnsDeleteThisPost){
+      for (let button of btnsDeleteThisPost){
         button.addEventListener('click', deleteThisPost);
       } 
 
+      const singleForms = document.getElementsByClassName('single-post');
+
+      for (let form of singleForms){
+        form.addEventListener('submit', showContent);
+      }
+
+
+/*     const btnsShowContent = document.getElementsByClassName('show-content');
        for (let button of btnsShowContent){
         button.addEventListener('click', showContent);
-      } 
+      }  */
+
+
 
     }
   }catch(error) 
@@ -129,16 +140,11 @@ btnHeaderDeleteAll.addEventListener('click', async () =>{
 //*************************************************************************** 
  async function showContent(event) {
 
+  console.log("In show content fuction");
   event.preventDefault();
-  let $jCurrentButton = $(this);
- 
-  console.log($jCurrentButton);
-  
-  let $jParentA = $jCurrentButton.parent("a");
-  let $jParent = $jParentA.parent(".card-action");
-  let $jDivSibling = $jParent.siblings(".content");
-  let $jASibling = $jParent.siblings("a");
-  $jASibling.children("h2").animate({fontSize: "24px"}, 1000 );
+  let $form= $(this);
+  let $jDivSibling = $form.children('.content');
+  let $jCurrentButton = $form.children('.card-action').children('a').children('.show-content');
 
   if ($jDivSibling.is(":hidden")){
     $jDivSibling.show(2000);
@@ -148,7 +154,7 @@ btnHeaderDeleteAll.addEventListener('click', async () =>{
   else {
     $jDivSibling.fadeOut(2000);
     $jCurrentButton.html("Show content");
-  } 
+  }  
    
 }
  //--- SHOW CONTENT ANIMATION --- end

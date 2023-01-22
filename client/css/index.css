@@ -25,10 +25,10 @@ h1, h2{
     margin: auto;
 }
 
-.single-post-wrapper{
+ .single-post-wrapper{
     background-color: rgb(148, 112, 239);
     margin: 20px 10px 20px 10px
-}
+} 
 
 .single-post{
     background-color: rgb(242, 229, 205);
