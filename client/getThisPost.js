@@ -2,6 +2,7 @@
 //-------- GET THIS POST -------- 
 //*************************************************************************** 
 //const $createPost = document.querySelector('#create-post');
+console.log('Get this post'); 
 const $form = document.querySelector('#get-form');
 const $title = document.querySelector('.card-title');
 const $postContent = document.querySelector('.post-content');
@@ -14,8 +15,8 @@ let urlParams = new URLSearchParams(queryString);
 let postId = urlParams.get('id');
 getThisPost();  
   
-async function getThisPost() {
-
+async function getThisPost(event) {
+    //event.preventDefault();
     try {
         console.log('Get this post function');       
         const res = await fetch(`${BASE_URL}/${postId}`, {
