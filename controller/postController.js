@@ -31,10 +31,6 @@ exports.updatePostById = async (req, res) => {
     try{  
       //const post = await Post.findOne({_id: req.params.postId});
       let updatedPost = req.body;
-      console.log('updated post');
-      console.log(req.params.postId);
-      console.log(updatedPost);
-  
       let post = await Post.findOneAndUpdate(
         {_id:req.params.postId}, 
         {title:updatedPost.title,
